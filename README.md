@@ -1,3 +1,21 @@
+# playlist-orderer
+
+Order Spotify playlists to minimise jarring transitions.
+
+This is a tool for re-ordering Spotify playlists, to maximise the smoothness of transitions between songs. It uses an algorithm which aims to minimise the "distance" between songs, using a metric calculated using various features of the music.
+
+You can then save the generated playlist straight to your Spotify playlists library!
+
+todos:
+- [ ] harmonic distance function
+- [ ] basic web UI
+- [ ] multifeature distance function
+- [ ] allow custom feature weightings
+- [ ] fully-functional web UI
+- [ ] look at using track harmony at a higher resolution (chord-level)
+- [ ] better algorithm for minimum spanning path, currently naive
+
+-----
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
