@@ -1,6 +1,6 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { tokenContext } from '@/context/TokenContextProvider';
 import NotSignedIn from './components/NotSignedIn';
@@ -15,6 +15,85 @@ export default function Home() {
   const [newPlaylistCreated, setNewPlaylistCreated] = useState(false);
 
   const { accessToken, setAccessToken } = useContext(tokenContext);
+
+  const handleAccessTokenExpiration = useCallback(async (time) => {
+    setTimeout(() => {
+      setAccessToken(null);
+      console.log('token expired');
+    }, time * 1000);
+  }, [setAccessToken]);
+
+  const getAccessToken = useCallback(async () => {
+    if (accessToken) {
+      console.log('Theres already a token');
+      return accessToken;
+    }
+
+    const refresh_token = session.token.accessToken;
+    const response = await fetch('api/session/spotify/accessToken', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        refresh_token,
+      }),
+    });
+
+    try {
+      const data = await response.json();
+      handleAccessTokenExpiration(data.expires_in);
+      setAccessToken(data.access_token);
+      return data.access_token;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }, [accessToken, handleAccessTokenExpiration, session, setAccessToken]);
+
+  const getProfile = useCallback(async () => {
+    const access_token = await getAccessToken();
+
+    const response = await fetch('api/spotify/getProfile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        access_token,
+      }),
+    });
+
+    try {
+      const { profile } = await response.json();
+      console.log(profile);
+      setProfile(profile);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [getAccessToken]);
+
+  const getPlaylists = useCallback(async () => {
+    const access_token = await getAccessToken();
+
+    const response = await fetch('api/spotify/getUserPlaylists', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        access_token,
+      }),
+    });
+
+    try {
+      const { playlists } = await response.json();
+      console.log(playlists);
+      setList(playlists);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [getAccessToken]);
 
   const createNewPlaylist = async () => {
     const access_token = await getAccessToken();
@@ -40,90 +119,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const getAccessToken = async () => {
-      if (accessToken) {
-        console.log('Theres already a token');
-        return accessToken;
-      }
-
-      const refresh_token = session.token.accessToken;
-      const response = await fetch('api/session/spotify/accessToken', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          refresh_token,
-        }),
-      });
-
-      try {
-        const data = await response.json();
-        handleAccessTokenExpiration(data.expires_in);
-        setAccessToken(data.access_token);
-        return data.access_token;
-      } catch (e) {
-        console.log(e);
-        return null;
-      }
-    };
-
-    const handleAccessTokenExpiration = async (time) => {
-      setTimeout(() => {
-        setAccessToken(null);
-        console.log('token expired');
-      }, time * 1000);
-    };
-
-    const getProfile = async () => {
-      const access_token = await getAccessToken();
-
-      const response = await fetch('api/spotify/getProfile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          access_token,
-        }),
-      });
-
-      try {
-        const { profile } = await response.json();
-        console.log(profile);
-        setProfile(profile);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    const getPlaylists = async () => {
-      const access_token = await getAccessToken();
-
-      const response = await fetch('api/spotify/getUserPlaylists', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          access_token,
-        }),
-      });
-
-      try {
-        const { playlists } = await response.json();
-        console.log(playlists);
-        setList(playlists);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     if (session) {
       getProfile();
       getPlaylists();
     }
-  }, [session, accessToken, setAccessToken]);
+  }, [session, accessToken, setAccessToken, getPlaylists, getProfile]);
 
   if (session) {
     return (

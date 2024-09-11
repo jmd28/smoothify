@@ -2,6 +2,8 @@ import localFont from 'next/font/local';
 import './globals.css';
 import AuthProvider from './components/AuthProvider';
 import TokenContextProvider from '@/context/TokenContextProvider';
+import { description, title } from './constants';
+import Navbar from './components/navbar';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -15,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: 'Smoothify',
-  description: 'Order Spotify playlists to minimise jarring transitions.',
+  title: title,
+  description: description,
 };
 
 export default function RootLayout({ children }) {
@@ -26,6 +28,7 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <Navbar></Navbar>
           <AuthProvider>{children}</AuthProvider>
         </body>
       </TokenContextProvider>

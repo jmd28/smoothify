@@ -25,3 +25,23 @@ body {
     text-wrap: balance;
   }
 }
+
+.title {
+  font-size: 7em;
+  text-transform: lowercase;
+  font-weight: bolder;
+}
+
+.slogan {
+  font-size: 1em;
+  text-transform: lowercase;
+  font-weight: normal;
+}
+
+label {
+  font-size: large;
+}
+
+p {
+  font-size: medium;
+}

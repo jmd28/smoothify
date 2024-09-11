@@ -8,6 +8,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Basic redirect
+      {
+        source: '/',
+        destination: '/playlists',
+        permanent: true,
+      },]
+  }
 };
 
 export default nextConfig;

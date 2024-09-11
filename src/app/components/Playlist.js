@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import defaultImg from '@/public/assets/img/defaultPlaylistImg.png';
+import { useRouter } from 'next/navigation';
 
 function Playlist({ content }) {
+  const router = useRouter()
   return (
-    <div className='ml-10 pb-8 text-xl sm:text-3xl'>
+    <div className='ml-10 pb-8 text-xl sm:text-3xl hover:scale-[0.99]' onClick={() => router.push(`/reorder/${content.id}`)}>
       <h1 className='primary-title'>{content.name}</h1>
       <div className='flex w-full flex-row flex-nowrap items-end justify-start'>
         <Image
