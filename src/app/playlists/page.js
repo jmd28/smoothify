@@ -14,6 +14,7 @@ export default function PlaylistsPage() {
     const [profile, setProfile] = useState(null);
     const [list, setList] = useState([]);
     const [newPlaylist, setNewPlaylist] = useState({});
+    const [searchTerm, setSearchTerm] = useState("");
     const [newPlaylistCreated, setNewPlaylistCreated] = useState(false);
     const router = useRouter();
 
@@ -133,11 +134,21 @@ export default function PlaylistsPage() {
     }
     // signed in
     return (
-        <div className='mb-40'>
+        <div className='container mb-40 mx-auto px-8'>
             <SignedIn profile={profile} />
-            {list.map((item) => (
-                <Playlist key={item.id} content={item} />
-            ))}
+            <div>
+                <input placeholder='filter'
+                    onChange={e => setSearchTerm(e.target.value)}
+                />
+            </div>
+            <div className="grid xlg:grid-cols-4 x lg:grid-cols-3 md:grid-cols-2 x">
+                {list
+                    .filter(x => x.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                    .map((item) =>
+                        <Playlist key={item.id} content={item} />
+                    )
+                }
+            </div>
         </div>
     );
 

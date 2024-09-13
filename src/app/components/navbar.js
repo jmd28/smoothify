@@ -13,9 +13,9 @@ function NavLink({ to, children }) {
     </a>
 }
 
-export default () => {
+export default function Navbar() {
     return <div className='px-4 py-4'>
         {title}
-        {navItems.map(x => <NavLink to={x.route}>{x.name}</NavLink>)}
+        {navItems.map((x, i) => <NavLink key={i} to={x.route}>{x.name}</NavLink>)}
     </div>
 }

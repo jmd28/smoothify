@@ -6,18 +6,16 @@ import user_img from '@/public/assets/img/user_img.svg';
 function SignedIn({ profile }) {
   const { data: session } = useSession();
   return (
-    <div className='mb-16 ml-10 mt-10 flex h-[22rem] max-w-[19rem] flex-col flex-nowrap items-center justify-around rounded-[2rem] border-4 border-solid border-white'>
-      <div className='mt-8 flex w-full flex-col flex-nowrap items-center justify-around'>
-        <Image
-          src={profile?.images?.[1]?.url || user_img}
-          className='h-500 w-500 aspect-square rounded-full object-cover'
-          width={120}
-          height={120}
-          alt='Default user image'
-        />
-        <p className='mb-2 mt-5 text-xl font-normal text-black'>Signed in as</p>
-        <span className='bold-txt'>{session?.token?.name}</span>
-      </div>
+    <div className='mt-8 flex w-full flex-col flex-nowrap items-center justify-around'>
+      <Image
+        src={profile?.images?.[1]?.url || user_img}
+        className='h-500 w-500 aspect-square rounded-full object-cover'
+        width={120}
+        height={120}
+        alt='Default user image'
+      />
+      <p className='mb-2 mt-5 text-xl font-normal text-black'>Signed in as</p>
+      <span className='bold-txt'>{session?.token?.name}</span>
       <p
         className='mb-5 mt-8 cursor-pointer underline opacity-70'
         onClick={() => signOut()}

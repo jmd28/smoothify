@@ -1,12 +1,12 @@
 import TitleCard from "../components/TitleCard"
 import { title } from "../constants"
 
-export default () => {
+export default function AboutPage() {
     return <div>
         <TitleCard />
-        <div class="mx-12 text-justify">
+        <div className="mx-12 text-justify">
             <p>
-                {title} is a tool for re-ordering Spotify playlists, to maximise the smoothness of transitions between songs. It uses an algorithm which aims to minimise the "distance" between songs,
+                {title} is a tool for re-ordering Spotify playlists, to maximise the smoothness of transitions between songs. It uses an algorithm which aims to minimise the &quotdistance&quot between songs,
                 using a metric calculated using various features of the music.
 
                 You can then save the generated playlist to your Spotify playlists library!
@@ -21,7 +21,7 @@ export default () => {
                 <br />
                 <br />
 
-                Whether you're a DJ looking to automate your playlist transitions,
+                Whether you&aposre a DJ looking to automate your playlist transitions,
                 or a casual listener who just wants rid of those jolts between songs, {title} has you covered.
 
                 <br />

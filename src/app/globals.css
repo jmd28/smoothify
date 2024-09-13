@@ -45,3 +45,16 @@ label {
 p {
   font-size: medium;
 }
+
+
+.btn {
+  @apply py-1 px-2 rounded;
+}
+
+.btn-blue {
+  @apply bg-blue-500 text-white;
+}
+
+.btn-blue:hover {
+  @apply bg-blue-700;
+}
