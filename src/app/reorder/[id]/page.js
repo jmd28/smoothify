@@ -6,6 +6,8 @@ import { tokenContext } from '@/context/TokenContextProvider';
 
 import { useRouter } from 'next/navigation'
 
+const keyLookup = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
+
 export default function ReorderPage({ params }) {
     const router = useRouter();
     const { data: session } = useSession();
@@ -14,7 +16,6 @@ export default function ReorderPage({ params }) {
 
     const { accessToken, setAccessToken } = useContext(tokenContext);
 
-    const keyLookup = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 
     const handleAccessTokenExpiration = useCallback(async (time) => {
         setTimeout(() => {
@@ -105,7 +106,30 @@ export default function ReorderPage({ params }) {
         } catch (e) {
             console.log(e)
         }
-    }, [getAccessToken, playlist])
+    }, [getAccessToken, playlist, tracks])
+
+    const smoothify = useCallback(async () => {
+        const access_token = await getAccessToken();
+        // const ids = playlist?.tracks?.items?.map(e => e?.track?.id)
+        // const id = params.id;
+        const response = await fetch('/api/spotify/getSmoothifiedPlaylist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tracks
+            }),
+        });
+
+        try {
+            const { tracks } = await response.json()
+            console.log("smoothified:", tracks)
+            setTracks(tracks)
+        } catch (e) {
+            console.log(e)
+        }
+    }, [getAccessToken, playlist, tracks])
 
     // fire this to get the playlist
     useEffect(() => {
@@ -118,6 +142,8 @@ export default function ReorderPage({ params }) {
     }, [session, getPlaylist])
 
     // fire this when playlist has loaded to get track details
+    // todo: does the UI ever need this data? maybe, maybe not
+    // TODO: make get playlist do this? e.g. getTracksWithFeatures
     useEffect(() => {
         async function fetchData() {
             await getFeatures()
@@ -136,12 +162,7 @@ export default function ReorderPage({ params }) {
         <div>
             <div className='mx-4'>
                 <button className='btn btn-blue' onClick={() => {
-                    const sorted = tracks.toSorted((a, b) => {
-                        const [key1, key2] = [a, b].map(e => (e?.track?.features?.key * 7) % 12)
-                        return key2 - key1
-                    })
-                    console.log("sorted", sorted)
-                    setTracks(sorted)
+                    smoothify()
                 }}>sort by key</button>
                 <h1>{playlist?.name}</h1>
                 <h1>{playlist?.owner?.display_name}</h1>
