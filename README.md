@@ -7,8 +7,8 @@ This is a tool for re-ordering Spotify playlists, to maximise the smoothness of 
 You can then save the generated playlist straight to your Spotify playlists library!
 
 todos:
-- [ ] harmonic distance function
-- [ ] basic web UI
+- [x] harmonic distance function
+- [x] basic web UI
 - [ ] multifeature distance function
 - [ ] allow custom feature weightings
 - [ ] fully-functional web UI
