@@ -76,6 +76,31 @@ export default function ReorderPage({ params }) {
         }
     }, [getAccessToken, params])
 
+    const savePlaylist = useCallback(async () => {
+        const access_token = await getAccessToken();
+        console.log("tracks", tracks.map(t => t.track.name))
+        const response = await fetch('/api/spotify/createNewPlaylist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                access_token,
+                name: playlist?.name,
+                description: playlist?.description || "",
+                track_uris: tracks.map(t => t.track.uri)
+            }),
+        });
+
+        try {
+            const res = await response.json()
+            // const { id, snapshot_id, name } = res
+            alert(JSON.stringify(res))
+        } catch (e) {
+            console.log("error saving playlist!")
+        }
+    }, [getAccessToken, playlist, tracks])
+
     const getFeatures = useCallback(async () => {
         const access_token = await getAccessToken();
         const ids = playlist?.tracks?.items?.map(e => e?.track?.id)
@@ -136,7 +161,7 @@ export default function ReorderPage({ params }) {
         async function fetchData() {
             await getPlaylist()
         }
-        if (session) {
+        if (session && !playlist) {
             fetchData()
         }
     }, [session, getPlaylist])
@@ -164,6 +189,9 @@ export default function ReorderPage({ params }) {
                 <button className='btn btn-blue' onClick={() => {
                     smoothify()
                 }}>sort by key</button>
+                <button className='btn btn-blue' onClick={() => {
+                    savePlaylist()
+                }}>save playlist</button>
                 <h1>{playlist?.name}</h1>
                 <h1>{playlist?.owner?.display_name}</h1>
             </div>

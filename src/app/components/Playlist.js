@@ -10,7 +10,7 @@ function Playlist({ content }) {
       <div className=' items-end justify-start'>
         <Image
           // className='aspect-square mr-4 h-32 w-32 sm:mr-8 sm:h-60 sm:w-60 '
-          src={content.images[0] ? content.images[0]?.url : defaultImg}
+          src={content.images?.[0] ? content.images[0]?.url : defaultImg}
           width={213}
           height={213}
           alt='Playlist image'

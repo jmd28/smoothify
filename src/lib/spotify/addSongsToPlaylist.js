@@ -1,4 +1,4 @@
-export const addDefaultSongsToPlaylists = async (playlist_id, access_token) => {
+export const addSongsToPlaylist = async (access_token, playlist_id, track_uris) => {
   const response = await fetch(
     `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
     {
@@ -8,10 +8,7 @@ export const addDefaultSongsToPlaylists = async (playlist_id, access_token) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        uris: [
-          'spotify:track:1HNkqx9Ahdgi1Ixy2xkKkL',
-          'spotify:track:77aXNAp5v0RxqOSIQmiP9F',
-        ],
+        uris: track_uris,
         position: 0,
       }),
     }
