@@ -12,8 +12,8 @@ const handler = NextAuth({
   providers: [
     SpotifyProvider({
       authorization: `https://accounts.spotify.com/authorize?scope=${intents.join(',')}`,
-      clientId: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,
-      clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
+      clientId: process.env.SPOTIFY_CLIENT_ID,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     }),
   ],
   callbacks: {
